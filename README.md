@@ -9,8 +9,10 @@ pc上让用户可以在上面用鼠标点击画画
 用or不用canvas都实现一下
 <br>
 不使用canvas index_div.html
+https://vivienyang.github.io/canvasPainting/index_div.html
 <br>
 使用canvas index_canvas1.html
+https://vivienyang.github.io/canvasPainting/index_canvas1.html
 <br>
 待优化
 <br>
