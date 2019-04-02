@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的画板</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .panel{
+            height: 100vh;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel" id="panel"></div>
+    <script>
+    var panel = document.getElementById('panel');
+    var radius = 5;//画笔的半径
+    var paintingFlag = false;
+    panel.onmousedown = function(a){//鼠标点击
+        // console.log(a)
+        paintingFlag=true
+    }
+    panel.onmousemove = function(b){//鼠标移动
+        // console.log(b)
+        if(paintingFlag){
+            drawCircle(b.clientX,b.clientY,radius)
+        }
+    }
+    panel.onmouseup = function(c){//鼠标离开
+        // console.log(c)
+        paintingFlag=false
+    }
+    function drawCircle(x,y,r){//画一个圆，传参圆心x,y和半径r
+        var cir = document.createElement('div')
+        cir.style="width:"+2*r+"px;"+
+        "height:"+2*r+"px;"+
+        "background:red;"+
+        "border-radius:100%;"+
+        "position:absolute;"+
+        "left:"+(x-r)+"px;"+
+        "top:"+(y-r)+"px;"+
+        panel.appendChild(cir)
+    }
+    </script>
+</body>
+</html>
