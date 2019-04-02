@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>我的画板-使用canvas</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        canvas{
+            background: grey;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myPanel" width=500 height=400></canvas>
+    <script>
+        var panel = document.getElementById('myPanel');
+        var context = panel.getContext('2d')
+        var radius=10
+        var paintingFlag=false
+        var oldPosi={"x":undefined,"y":undefined}
+        panel.onmousedown = function(a){//鼠标点击
+            // console.log(a)
+            oldPosi={"x":a.clientX,"y":a.clientY}
+            paintingFlag=true
+            // drawCircle(a.clientX,a.clientY,radius)
+        }
+        panel.onmousemove = function(b){//鼠标移动
+            // console.log(b)
+            if(paintingFlag){
+                var newPosi={"x":b.clientX,"y":b.clientY}
+                drawPath(oldPosi.x,oldPosi.y,newPosi.x,newPosi.y)
+                oldPosi=newPosi
+            }
+        }
+        panel.onmouseup = function(c){//鼠标离开
+            // console.log(c)
+            paintingFlag=false
+        }
+        //私有函数
+        function drawCircle(x,y,r) { //用canvas画一个圆，
+            context.beginPath()
+            context.arc(x,y,r,0,Math.PI*2)
+            context.closePath()
+            context.fill();
+        }
+        function drawPath(x1,y1,x2,y2){
+            context.beginPath()
+            context.moveTo(x1,y1)
+            context.lineTo(x2,y2)
+            context.closePath()
+            context.stroke()
+            
+        }
+    </script>
+</body>
+</html>
