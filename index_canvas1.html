@@ -5,63 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>我的画板-使用canvas</title>
-    <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
-        .clearfix::after{
-            content:'';
-            display: block;
-            clear: both;
-        }
-        .fl{
-            float: left;
-        }
-        .fr{
-            float: right;
-        }
-        canvas{
-            background: grey;
-        }
-        .optionsArea{
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
-        .optionsArea .colorBox > span{
-            width: 30px;
-            height: 30px;
-            display: inline-block;
-            cursor: pointer;
-            margin: 0 10px;
-        }
-        .optionsArea .colorBox > span.red{
-            background: red;
-        }
-        .optionsArea .colorBox > span.orange{
-            background: orange;
-        }
-        .optionsArea .colorBox > span.yellow{
-            background: yellow;
-        }
-        .optionsArea .colorBox > span.green{
-            background: green;
-        }
-        .optionsArea .colorBox > span.blue{
-            background: blue;
-        }
-        .optionsArea .colorBox > span.purple{
-            background: purple;
-        }
-    </style>
+    <link rel="stylesheet" href="common/style.css">
 </head>
 <body>
     <canvas id="myPanel" width=500 height=400></canvas>
     <div class="optionsArea clearfix">
         <div class="actions fl">
-            <button id="eraser">橡皮擦</button>
-            <button id="paint">画笔</button>
+            <button id="usePaint" class="active">画笔</button>
+            <button id="useEraser">橡皮擦</button>
+            <!-- <button id="fill">油漆桶</button> -->
         </div>
         <div class="colorBox fl" id="colorBox">
             <span class="red"></span>
@@ -70,60 +22,105 @@
             <span class="green"></span>
             <span class="blue"></span>
             <span class="purple"></span>
+            <span class="black"></span>
+            <span class="white"></span>
         </div>
     </div>
 
     <script>
         var canvas = document.getElementById('myPanel')
+        setFullSreenCanvas()
         var context = canvas.getContext('2d')
         var radius=10
-        var paintingFlag=false
+        var usingFlag=false;//是否正在使用 在paint或eraser
+        var eraserFlag=false
         var color = 'red'
-        var colorSpan=document.getElementById('colorBox').getElementsByTagName('span');
-        for(let index in colorSpan) {  
-            console.log(index,colorSpan[index]);  
-            var span = colorSpan[index];
-            span.onclick=function(e){
-                console.log(e.target.className)
-                color=e.target.className
-            }
-        }
+        // drawCircle(100,100,100,color)
         var oldPosi={"x":undefined,"y":undefined}
-        canvas.onmousedown = function(a){//鼠标点击
-            // console.log(a)
-            oldPosi={"x":a.clientX,"y":a.clientY}
-            paintingFlag=true
-            // drawCircle(a.clientX,a.clientY,radius)
-        }
-        canvas.onmousemove = function(b){//鼠标移动
-            // console.log(b)
-            if(paintingFlag){
-                var newPosi={"x":b.clientX,"y":b.clientY}
-                drawPath(oldPosi.x,oldPosi.y,newPosi.x,newPosi.y,color)
-                oldPosi=newPosi
-            }
-        }
-        canvas.onmouseup = function(c){//鼠标离开
-            // console.log(c)
-            paintingFlag=false
-        }
+        listenAction();
+        listenChangeColor()
+        listenMouse();
+
 
         //私有函数
-        function drawCircle(x,y,r,color) { //用canvas画一个圆，
+        function drawCircle(x,y,r,color) { 
+            //用canvas画一个圆，圆心坐标x,圆心坐标y，半径r，颜色color
             context.beginPath()
-            context.fillStyle = 'green';
+            context.fillStyle = color;
             context.arc(x,y,r,0,Math.PI*2)
             context.closePath()
             context.fill();
         }
         function drawPath(x1,y1,x2,y2,color){
+            //用来画路径，因为onmousemove不是连续的，画快了画不了连续的线来
+            //画一个从点(x1,y1)到点(x2,y2)的路径，color是线的颜色
             context.beginPath()
             context.strokeStyle = color;
             context.moveTo(x1,y1)
             context.lineTo(x2,y2)
             context.closePath()
             context.stroke()
-            
+        }
+        function clearRect(x,y,w,h){//使用橡皮擦clear矩形区域
+            context.clearRect(x-w/2, y-h/2, w, h);
+        }
+        function setFullSreenCanvas(){//让canvas始终全屏显示
+            setCanvasSize();
+            window.onresize=function(){
+                setCanvasSize();
+            }
+            function setCanvasSize(){
+                var width = document.documentElement.clientWidth;
+                var height = document.documentElement.clientHeight;
+                canvas.width=width;
+                canvas.height=height;
+            }            
+        }
+        function listenChangeColor(){//监听画笔颜色变化
+            var colorSpan=document.getElementById('colorBox').getElementsByTagName('span');
+            for(let index in colorSpan) {  
+                console.log(index,colorSpan[index]);  
+                var span = colorSpan[index];
+                span.onclick=function(e){
+                    console.log(e.target.className)
+                    color=e.target.className
+                }
+            }            
+        }
+        function listenAction(){//监听用户点击画笔or橡皮擦，默认是画笔
+            var useEraser=document.getElementById('useEraser')
+            var usePaint=document.getElementById('usePaint')
+            useEraser.onclick=function(){
+                usePaint.className=''
+                useEraser.className='active'
+                eraserFlag=true
+            }
+            usePaint.onclick=function(){
+                usePaint.className='active'
+                useEraser.className=''
+                eraserFlag=false
+            }            
+        }
+        function listenMouse(){//用来监听canvas中的mouse的down、move、up事件
+            canvas.onmousedown = function(a){//鼠标点击
+                oldPosi={"x":a.clientX,"y":a.clientY}
+                usingFlag=true
+            }
+            canvas.onmousemove = function(b){//鼠标移动
+                var newPosi={"x":b.clientX,"y":b.clientY}
+                if(usingFlag){
+                    if(eraserFlag){
+                        clearRect(newPosi.x,newPosi.y,10,10)
+                    }else{
+                        drawPath(oldPosi.x,oldPosi.y,newPosi.x,newPosi.y,color)
+                        oldPosi=newPosi
+                    }
+                }
+            }
+            canvas.onmouseup = function(c){//鼠标离开
+                // console.log(c)
+                usingFlag=false
+            }
         }
     </script>
 </body>

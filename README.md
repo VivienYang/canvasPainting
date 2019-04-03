@@ -14,7 +14,10 @@ https://vivienyang.github.io/canvasPainting/index_div.html
 使用canvas index_canvas1.html
 https://vivienyang.github.io/canvasPainting/index_canvas1.html
 <br>
-待优化
+优化点：
+1.添加画笔颜色选择功能
+2.添加橡皮擦和画笔切换功能
+3.代码优化，封装成函数
 <br>
 参考：https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes
 <br>
