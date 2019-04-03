@@ -78,11 +78,9 @@
         }
         function listenChangeColor(){//监听画笔颜色变化
             var colorSpan=document.getElementById('colorBox').getElementsByTagName('span');
-            for(let index in colorSpan) {  
-                console.log(index,colorSpan[index]);  
+            for(let index in colorSpan) {   
                 var span = colorSpan[index];
                 span.onclick=function(e){
-                    console.log(e.target.className)
                     color=e.target.className
                 }
             }            
@@ -118,7 +116,6 @@
                 }
             }
             canvas.onmouseup = function(c){//鼠标离开
-                // console.log(c)
                 usingFlag=false
             }
         }
