@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
 }
+body{
+  overflow: hidden;
+}
 .clearfix::after{
   content:'';
   display: block;
