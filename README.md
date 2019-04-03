@@ -11,8 +11,11 @@ pc上让用户可以在上面用鼠标点击画画
 不使用canvas index_div.html
 https://vivienyang.github.io/canvasPainting/index_div.html
 <br>
-使用canvas index_canvas1.html
-https://vivienyang.github.io/canvasPainting/index_canvas1.html
+使用canvas
+pc端：ndex_canvas_pc.html
+https://vivienyang.github.io/canvasPainting/index_canvas_pc.html
+移动端：index_canvas_mobile.html
+https://vivienyang.github.io/canvasPainting/index_canvas_mobile.html
 <br>
 优化点：
 1.添加画笔颜色选择功能

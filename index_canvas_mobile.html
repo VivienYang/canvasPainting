@@ -102,12 +102,12 @@
         function listenTouch(){//用来监听canvas中的移动端的touch的start、end、move事件
             canvas.addEventListener("touchstart", function(a){
                 console.log(a)
-                oldPosi={"x":a.clientX,"y":a.clientY}
+                oldPosi={"x":a.touches[0].clientX,"y":a.touches[0].clientY}
                 usingFlag=true
             }, false);
-            canvas.addEventListener("touchmove", function(b){
+            canvas.ontouchmove=function(b){
                 console.log(b)
-                var newPosi={"x":b.pageX,"y":b.pageY}
+                var newPosi={"x":b.touches[0].clientX,"y":b.touches[0].clientY}
                 if(usingFlag){
                     if(eraserFlag){
                         clearRect(newPosi.x,newPosi.y,10,10)
@@ -116,7 +116,7 @@
                         oldPosi=newPosi
                     }
                 }
-            }, false);
+            }
             canvas.addEventListener("touchend", function(c){
                 usingFlag=false
             }, false);
