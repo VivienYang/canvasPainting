@@ -33,8 +33,10 @@ canvas{
   font-weight: bold;
 }
 .optionsArea .colorBox > span{
-  width: 30px;
-  height: 30px;
+  width: 5vw;
+  height: 5vw;
+  max-width: 30px;
+  max-height: 30px;
   display: inline-block;
   cursor: pointer;
   margin: 0 10px;
