@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>我的画板-使用canvas</title>
     <link rel="stylesheet" href="common/style.css">
@@ -112,12 +112,10 @@
         }
         function listenTouch(){
             canvas.addEventListener("touchstart", function(a){
-                console.log(a)
                 oldPosi={"x":a.touches[0].clientX,"y":a.touches[0].clientY}
                 usingFlag=true
             }, false);
             canvas.ontouchmove=function(b){
-                console.log(b)
                 var newPosi={"x":b.touches[0].clientX,"y":b.touches[0].clientY}
                 if(usingFlag){
                     if(eraserFlag){
