@@ -10,46 +10,115 @@
             margin: 0;
             padding: 0;
         }
+        .clearfix::after{
+            content:'';
+            display: block;
+            clear: both;
+        }
+        .fl{
+            float: left;
+        }
+        .fr{
+            float: right;
+        }
         canvas{
             background: grey;
+        }
+        .optionsArea{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+        }
+        .optionsArea .colorBox > span{
+            width: 30px;
+            height: 30px;
+            display: inline-block;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .optionsArea .colorBox > span.red{
+            background: red;
+        }
+        .optionsArea .colorBox > span.orange{
+            background: orange;
+        }
+        .optionsArea .colorBox > span.yellow{
+            background: yellow;
+        }
+        .optionsArea .colorBox > span.green{
+            background: green;
+        }
+        .optionsArea .colorBox > span.blue{
+            background: blue;
+        }
+        .optionsArea .colorBox > span.purple{
+            background: purple;
         }
     </style>
 </head>
 <body>
     <canvas id="myPanel" width=500 height=400></canvas>
+    <div class="optionsArea clearfix">
+        <div class="actions fl">
+            <button id="eraser">橡皮擦</button>
+            <button id="paint">画笔</button>
+        </div>
+        <div class="colorBox fl" id="colorBox">
+            <span class="red"></span>
+            <span class="orange"></span>
+            <span class="yellow"></span>
+            <span class="green"></span>
+            <span class="blue"></span>
+            <span class="purple"></span>
+        </div>
+    </div>
+
     <script>
-        var panel = document.getElementById('myPanel');
-        var context = panel.getContext('2d')
+        var canvas = document.getElementById('myPanel')
+        var context = canvas.getContext('2d')
         var radius=10
         var paintingFlag=false
+        var color = 'red'
+        var colorSpan=document.getElementById('colorBox').getElementsByTagName('span');
+        for(let index in colorSpan) {  
+            console.log(index,colorSpan[index]);  
+            var span = colorSpan[index];
+            span.onclick=function(e){
+                console.log(e.target.className)
+                color=e.target.className
+            }
+        }
         var oldPosi={"x":undefined,"y":undefined}
-        panel.onmousedown = function(a){//鼠标点击
+        canvas.onmousedown = function(a){//鼠标点击
             // console.log(a)
             oldPosi={"x":a.clientX,"y":a.clientY}
             paintingFlag=true
             // drawCircle(a.clientX,a.clientY,radius)
         }
-        panel.onmousemove = function(b){//鼠标移动
+        canvas.onmousemove = function(b){//鼠标移动
             // console.log(b)
             if(paintingFlag){
                 var newPosi={"x":b.clientX,"y":b.clientY}
-                drawPath(oldPosi.x,oldPosi.y,newPosi.x,newPosi.y)
+                drawPath(oldPosi.x,oldPosi.y,newPosi.x,newPosi.y,color)
                 oldPosi=newPosi
             }
         }
-        panel.onmouseup = function(c){//鼠标离开
+        canvas.onmouseup = function(c){//鼠标离开
             // console.log(c)
             paintingFlag=false
         }
+
         //私有函数
-        function drawCircle(x,y,r) { //用canvas画一个圆，
+        function drawCircle(x,y,r,color) { //用canvas画一个圆，
             context.beginPath()
+            context.fillStyle = 'green';
             context.arc(x,y,r,0,Math.PI*2)
             context.closePath()
             context.fill();
         }
-        function drawPath(x1,y1,x2,y2){
+        function drawPath(x1,y1,x2,y2,color){
             context.beginPath()
+            context.strokeStyle = color;
             context.moveTo(x1,y1)
             context.lineTo(x2,y2)
             context.closePath()
